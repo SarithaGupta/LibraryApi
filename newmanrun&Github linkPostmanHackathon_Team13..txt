@@ -1,4 +1,0 @@
-newman run PostmanHackathon_Team13.postman_collection.json -d PostmanAcers_Datasheet.xlsx_Program_Data.csv -e QA.postman_environment.json
-
-github
-https://github.com/ramyavasagiri/Postmanacers.git
