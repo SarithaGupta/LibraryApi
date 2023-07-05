@@ -1,0 +1,196 @@
+{
+	"info": {
+		"_postman_id": "aa6944ea-bdd6-454e-96f0-450e39b4adac",
+		"name": "Library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AddBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4c734fee-ffd0-41e7-9896-ab7353b2ff9e",
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"console.log(jsonData);\r",
+							"const bookId = jsonData.ID;\r",
+							"pm.environment.set(\"book_id\",bookId)\r",
+							"pm.test(\"Validate the status code is 200\",function()\r",
+							"{\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(jsonData).to.have.property(\"Msg\");\r",
+							"    pm.expect(jsonData.Msg).to.eql(\"successfully added\")\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Validate Headers Cookies ResponseTime\" , function()\r",
+							"{\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json;charset=UTF-8\");\r",
+							"\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1200);\r",
+							"    pm.expect(pm.response.text()).to.include(\"successfully added\");\r",
+							"\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "432cfa2e-457f-4944-80ab-bdd2872430e0",
+						"exec": [
+							"//RS453657\r",
+							"console.log(pm.globals.get(\"companyCode\"));\r",
+							"const code = pm.globals.get(\"companyCode\");\r",
+							"const val = pm.variables.replaceIn('{{$randomInt}}');\r",
+							"pm.collectionVariables.set(\"isbn\", code+val);\r",
+							"pm.collectionVariables.set(\"author_name\",\"Rahul Shetty\");\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "252eb027-8ef4-4060-9365-43537e4f0e1e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n\"name\":\"Learn Appium Automation with Java\",\r\n\"isbn\":\"{{isbn}}\",\r\n\"aisle\":\"228\",\r\n\"author\":\"{{author_name}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/Library/Addbook.php"
+			},
+			"response": []
+		},
+		{
+			"name": "GetBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "245ef279-bd94-4f4e-9b85-5dee2d029261",
+						"exec": [
+							"const getBookResponse = pm.response.json();\r",
+							"pm.test(\"Validate the json response logic\",function()\r",
+							"{\r",
+							"    console.log(getBookResponse);\r",
+							"    pm.expect(getBookResponse[0].author).to.eql(pm.collectionVariables.get(\"author_name\"));\r",
+							"\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "6617d7f7-bdd9-41cb-a723-62c85e51d562",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/Library/GetBook.php?author=John foe&ID={{book_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"Library",
+						"GetBook.php"
+					],
+					"query": [
+						{
+							"key": "author",
+							"value": "John foe"
+						},
+						{
+							"key": "ID",
+							"value": "{{book_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBook",
+			"_postman_id": "73239127-415e-46c7-aea7-8d68f9aece17",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \r\n\"ID\" : \"{{book_id}}\"\r\n \r\n} \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/Library/DeleteBook.php"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b7357505-f4b5-47c0-a022-e913424135cf",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "fe387d2d-e3e5-48d6-a58c-cf1350cc583b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "c60dfea5-7108-443e-a3c3-ca1ba6a775c2",
+			"key": "isbn",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "4b0f0f7c-f014-4706-bff5-b4835078c453",
+			"key": "author_name",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
